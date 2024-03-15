@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faturar | Rainha da Roleta</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            position: cover;
+            background-size: cover;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('perfil.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat; /* Impede a repetição da imagem de fundo */
+            filter: blur(5px); /* Adicionando desfoque à imagem de fundo */
+            z-index: -1; /* Garante que o filtro esteja por trás do conteúdo */
+        }
+
+        body {
+            font-family: Georgia, serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            background-color: rgba(0, 0, 0, 0.601); /* Cor de fundo para o caso de a imagem não carregar */
+        }
+
+        .top-text {
+            background-color: red;
+            color: white;
+            font-size: 24px;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #ffffff;
+            animation: pulse 2s infinite alternate;
+            position: relative;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.511);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.01); }
+        }
+
+        .button {
+            background-color: #ff0000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 0px;
+            margin-top: 40PX;
+            margin-bottom: -10px;
+        }
+
+        .button:hover {
+            background-color: #7f0404;
+        }
+
+        .testimonial-images {
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Espaço entre as imagens */
+            margin-top: 20px; /* Espaço entre os containers */
+        }
+
+        .testimonial-image {
+            border-radius: 10px;
+            overflow: hidden; /* Para assegurar que a borda arredondada funciona */
+            box-shadow: 0px 0px 20px rgba(255, 0, 0, 0.281); /* Adicionando sombra */
+            cursor: pointer; /* Alterando cursor para indicar clicabilidade */
+            position: relative; /* Adicionando posição relativa para poder posicionar os pseudoelementos */
+            width: 200px; /* Ajuste conforme necessário */
+            height: 200px; /* Ajuste conforme necessário */
+            transition: transform 0.5s; /* Adicionando transição para o efeito de zoom */
+        }
+
+        .testimonial-image img {
+            width: 100%; /* Ajuste conforme necessário */
+            height: 100%; /* Ajuste conforme necessário */
+            object-fit: cover;
+        }
+
+        .testimonial-image:hover {
+            transform: scale(1.1); /* Aumentar a escala em hover */
+        }
+
+        .popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #00602eeb;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            animation: slideIn 0.5s ease;
+            display: none;
+        }
+
+        @keyframes slideIn {
+            from {bottom: -100px; opacity: 0;}
+            to {bottom: 20px; opacity: 1;}
+        }
+
+        .expanded-image-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Fundo escuro semi-transparente */
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000; /* Certifica-se de que a imagem expandida esteja acima de outros elementos */
+        }
+
+        .expanded-image {
+            max-width: 80%;
+            max-height: 80%;
+            border-radius: 10px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #ffffffe1;
+            color: #000000;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .container {
+            position: relative; /* Permite que o contêiner de fundo escuro seja posicionado em relação a este contêiner */
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(59, 59, 59, 0.26); /* Cor de fundo mais escura */
+            color: white; /* Cor do texto dentro do contêiner */
+            text-align: center;
+        }
+
+        .container p {
+            margin: 10px 0; /* Espaçamento entre os parágrafos dentro do contêiner */
+        }
+
+        .results {
+            font-size: 24px;
+            font-style: italic;
+            color: #fff;
+            text-shadow: 0 0 10px #000000, 0 0 10px #000000;
+            margin-bottom: 20px;
+            margin-top: 60px;
+        }
+
+        .results2 {
+            font-size: 20px;
+            font-style: normal;
+            color: #fff;
+            text-shadow: 0 0 10px #000000, 0 0 25px #ff0000, 0 0 30px rgb(255, 0, 0), 0 0 40px #00f, 0 0 50px rgb(0, 0, 0), 0 0 60px #00f, 0 0 70px #00f;
+            margin-bottom: 20px;
+            margin-top: 40px;
+            font-style: oblique;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            .button {
+                font-size: 16px;
+            }
+            .top-text {
+                font-size: 16px;
+            }
+        }
+
+        footer {
+            text-align: center;
+            color: #fff;
+            margin-top: auto;
+            padding: 20px 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            width: 100%;
+
+        }
+
+        .main-text {
+            font-size: 28px; /* Ajuste o tamanho conforme necessário */
+            font-weight: bold; /* Para torná-lo mais chamativo */
+            color: #fff; /* Cor do texto */
+            text-shadow: 0 0 10px#0000007a;
+}
+
+        .sub-text {
+            font-size: 90%; /* 10% menor que o texto acima */
+            color: #fff; /* Cor do texto */
+            text-shadow: 0 0 10px#000000;
+}
+
+        .highlight-text {
+            font-size: 26px; /* Tamanho maior */
+            font-weight: bold; /* Para torná-lo mais chamativo */
+            color: rgb(255, 238, 0); /* Cor amarela, por exemplo */
+            margin-top: -5px;
+            text-shadow: 0 0 10px#000000;
+}
+
+    </style>
+</head>
+<body>
+
+<div class="top-text">TODOS OS SINAIS SÃO ANALISADOS POR UM TIME DE ESPECIALISTAS!</div>
+
+<h1>Não perca tempo.. Comece a lucrar nas próximas 24 horas!</h1>
+
+<div class="container">
+    <p class="main-text">COM AS MINHAS ESTRATÉGIAS DE NÚMEROS CERTEIROS!</p>
+    <p class="sub-text">Aproveite, pois é por TEMPO LIMITADO!</p>
+    <p class="highlight-text"> APENAS 9 VAGAS GRATUITAS </p>
+</div>
+
+<button class="button" onclick="animateButtonClick()">☛ Clique Aqui para Acessar ☚</button>
+
+<div class="results">Alguns dos Resultados de Participantes do MEU GRUPO</div>
+
+<div class="popup">
+    Paula acabou de entrar!
+</div>
+
+<div class="testimonial-images">
+    <div class="testimonial-image">
+        <img src="Instagram_Feedback.jpeg" alt="Instagram Feedback" onclick="expandImage(this)">
+    </div>
+    <div class="testimonial-image">
+        <img src="Instagram_Feedback2.jpeg" alt="Instagram Feedback 2" onclick="expandImage(this)">
+    </div>
+    <div class="testimonial-image">
+        <img src="Whatsapp_Feedback.jpeg" alt="Whatsapp Feedback" onclick="expandImage(this)">
+    </div>
+    <div class="testimonial-image">
+        <img src="Whatsapp_Feedback2.jpeg" alt="WhatsApp Feedback 2" onclick="expandImage(this)">
+    </div>
+    <!-- Adicione mais imagens conforme necessário -->
+</div>
+
+<footer>Todos os Direitos Reservados. 2024 ©️</footer>
+
+<div class="expanded-image-container" id="expandedImageContainer">
+    <button class="close-button" id="closeButton" onclick="closeExpandedImage()">Fechar Imagem</button>
+    <img src="" alt="" class="expanded-image" id="expandedImage">
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function animateButtonClick() {
+        const button = document.querySelector('.button');
+        button.style.animation = 'pulse 0.5s ease-in-out';
+        setTimeout(() => {
+            button.style.animation = '';
+            setTimeout(() => {
+                window.location.href = "https://t.me/arainhadaroleta";
+            }, 3500);
+        }, 500);
+            
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3200,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+            Toast.fire({
+                icon: "success",
+                title: "Parabéns! Logo será redirecionado para os ganhos!"
+        });
+    }
+
+    function expandImage(element) {
+        const imageSrc = element.src;
+        const expandedImage = document.getElementById('expandedImage');
+        expandedImage.src = imageSrc;
+        document.getElementById('expandedImageContainer').style.display = 'flex';
+    }
+
+    function closeExpandedImage() {
+        document.getElementById('expandedImageContainer').style.display = 'none';
+    }
+
+    const testimonialImages = document.querySelectorAll('.testimonial-image img');
+    const expandedImageContainer = document.getElementById('expandedImageContainer');
+    const expandedImage = document.getElementById('expandedImage');
+    const closeButton = document.getElementById('closeButton');
+    const popup = document.querySelector('.popup');
+    const names = ['Adelmo Silva', 'Roger Costa', 'João Figueiredo', 'Izabel Costa', 'Maria Pereira', 'Fernando', 'Luis G', 'Adalberto Af.', 'Tainara S', '~CWB', 'Patrick W. Silva', 'Lucas', 'Ariel', 'Jennifer', 'João Silva', 'Alon', 'Maicon', 'Freya Henn']; // Adicione mais nomes conforme necessário
+    let currentIndex = 0;
+
+    testimonialImages.forEach(image => {
+        image.addEventListener('click', () => {
+            expandedImage.src = image.src;
+            expandedImageContainer.style.display = 'flex';
+        });
+    });
+
+    closeButton.addEventListener('click', () => {
+        expandedImageContainer.style.display = 'none';
+    });
+
+    setInterval(() => {
+        popup.textContent = names[currentIndex] + ' acabou de acessar!';
+        popup.style.display = 'block';
+        currentIndex = (currentIndex + 1) % names.length;
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 4000); // Altera para o próximo nome após 2 segundos
+    }, 8600); // Alterna a cada 5 segundos
+</script>
+
+</body>
+</html>
